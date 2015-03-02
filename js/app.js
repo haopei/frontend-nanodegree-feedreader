@@ -6,7 +6,15 @@
  * jQuery.
  */
 
-// The names and URLs to all of the feeds we'd like available.
+
+/* ADDED BY STUDENT
+ * Handles user session status
+ * @return {bool} returns false by default
+ */
+function loggedIn() {
+    return false;
+}
+
 var allFeeds = [
     {
         name: 'Udacity Blog',
@@ -43,7 +51,7 @@ function init() {
 function loadFeed(id, cb) {
     var feedUrl = allFeeds[id].url,
         feedName = allFeeds[id].name,
-        feed = new google.feeds.Feed(feedUrl);
+        feed = new google.feeds.Feed(feedUrl); // feed object contains feeds given a feed url
 
     /* Load the feed using the Google Feed Reader API.
      * Once the feed has been loaded, the callback function
@@ -61,8 +69,8 @@ function loadFeed(id, cb) {
                 entriesLen = entries.length,
                 entryTemplate = Handlebars.compile($('.tpl-entry').html());
 
-            title.html(feedName);   // Set the header text
-            container.empty();      // Empty out all previous entries
+            title.html(feedName);
+            container.empty();
 
             /* Loop through the entries we just loaded via the Google
              * Feed Reader API. We'll then parse that entry against the
@@ -83,7 +91,7 @@ function loadFeed(id, cb) {
 /* Google API: Loads the Feed Reader API and defines what function
  * to call when the Feed Reader API is done loading.
  */
-google.load('feeds', '1');
+google.load('feeds', '1'); // loads feeds module version 1
 google.setOnLoadCallback(init);
 
 /* All of this functionality is heavily reliant upon the DOM, so we
@@ -93,7 +101,7 @@ google.setOnLoadCallback(init);
 $(function() {
     var container = $('.feed'),
         feedList = $('.feed-list'),
-        feedItemTemplate = Handlebars.compile($('.tpl-feed-list-item').html()),
+        feedItemTemplate = Handlebars.compile($('.tpl-feed-list-item').html()), // data-id="{{id}}"
         feedId = 0,
         menuIcon = $('.menu-icon-link');
 
@@ -106,7 +114,6 @@ $(function() {
     allFeeds.forEach(function(feed) {
         feed.id = feedId;
         feedList.append(feedItemTemplate(feed));
-
         feedId++;
     });
 
@@ -116,8 +123,7 @@ $(function() {
      */
     feedList.on('click', 'a', function() {
         var item = $(this);
-
-        $('body').addClass('menu-hidden');
+        $('body').addClass('menu-hidden'); // comment this line out to test 'menu hides when feedItem is clicked'
         loadFeed(item.data('id'));
         return false;
     });
